@@ -1,0 +1,28 @@
+services:
+    yb_remote_translations.translation.loader.pdo:
+        class: '%yb_remote_translations.pdo.loader.class%'
+        arguments:
+            - '@yb_remote_translations.translation.loader.pdo.client'
+        tags:
+            - { name: translation.loader, alias: pdo }
+
+
+    yb_remote_translations.translation.loader.pdo.client:
+        class: YB\Bundle\RemoteTranslationsBundle\Translation\Loader\Client\Adapter\PdoAdapter
+        arguments:
+            - '@yb_remote_translations.pdo'
+            - { table: '%yb_remote_translations.pdo.client.table%', locale_col: '%yb_remote_translations.pdo.client.locale_col%', domain_col: '%yb_remote_translations.pdo.client.domain_col%', key_col: '%yb_remote_translations.pdo.client.key_col%', value_col: '%yb_remote_translations.pdo.client.value_col%' }
+        calls:
+            - [setLogger, ['@yb_remote_translations.pdo.logger']]
+        public: false
+
+
+    yb_remote_translations.pdo:
+        class: PDO
+        arguments:
+            - '%yb_remote_translations.pdo.client.dsn%'
+            - '%yb_remote_translations.pdo.client.user%'
+            - '%yb_remote_translations.pdo.client.password%'
+        calls:
+            - [setAttribute, [!php/const:PDO::ATTR_ERRMODE, !php/const:PDO::ERRMODE_EXCEPTION]]
+        public: false

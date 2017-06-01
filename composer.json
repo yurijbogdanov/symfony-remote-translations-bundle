@@ -1,0 +1,32 @@
+{
+    "name": "yurijbogdanov/remote-translations-bundle",
+    "type": "symfony-bundle",
+    "description": "YBRemoteTranslationsBundle - Symfony bundle for using translations stored remotely (API, AWS S3, Google Sheets, PDO).",
+    "keywords": ["php", "symfony", "symfony-bundle", "symfony-translation", "symfony-translations"],
+    "homepage": "https://github.com/yurijbogdanov/symfony-remote-translations-bundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Yurij Bogdanov",
+            "email": "bogdanovyurij@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.1",
+        "aws/aws-sdk-php": "^3.28",
+        "google/apiclient": "^2.1",
+        "guzzlehttp/guzzle": "^6.3"
+    },
+    "require-dev": {
+        "symfony/phpunit-bridge": "^4.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "YB\\Bundle\\RemoteTranslationsBundle\\": ""
+        },
+        "exclude-from-classmap": [
+            "/Tests/"
+        ]
+    },
+    "minimum-stability": "stable"
+}

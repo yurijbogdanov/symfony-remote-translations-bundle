@@ -1,0 +1,32 @@
+services:
+    yb_remote_translations.googlesheets.loader:
+        class: '%yb_remote_translations.googlesheets.loader.class%'
+        arguments:
+            - '@yb_remote_translations.translation.loader.googlesheets.client'
+        tags:
+            - { name: translation.loader, alias: googlesheets }
+
+
+    yb_remote_translations.translation.loader.googlesheets.client:
+        class: YB\Bundle\RemoteTranslationsBundle\Translation\Loader\Client\Adapter\GoogleSheetsAdapter
+        arguments:
+            - '@yb_remote_translations.googlesheets'
+            - { spreadsheet_id: '%yb_remote_translations.googlesheets.client.spreadsheet_id%', sheet_name_format: '%yb_remote_translations.googlesheets.client.sheet_name_format%', sheet_range: '%yb_remote_translations.googlesheets.client.sheet_range%' }
+        calls:
+            - [setLogger, ['@yb_remote_translations.googlesheets.logger']]
+        public: false
+
+
+    yb_remote_translations.googlesheets:
+        class: Google_Service_Sheets
+        arguments:
+            - '@yb_remote_translations.google'
+        public: false
+
+
+    yb_remote_translations.google:
+        class: Google_Client
+        calls:
+            - [setAuthConfig, ['%yb_remote_translations.googlesheets.client.credentials%']]
+            - [addScope, [!php/const:Google_Service_Sheets::SPREADSHEETS_READONLY]]
+        public: false

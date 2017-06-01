@@ -1,0 +1,22 @@
+services:
+    yb_remote_translations.translation.loader.api:
+        class: '%yb_remote_translations.api.loader.class%'
+        arguments:
+            - '@yb_remote_translations.translation.loader.api.client'
+        tags:
+            - { name: translation.loader, alias: api }
+
+
+    yb_remote_translations.translation.loader.api.client:
+        class: YB\Bundle\RemoteTranslationsBundle\Translation\Loader\Client\Adapter\ApiAdapter
+        arguments:
+            - '@yb_remote_translations.guzzle'
+            - { endpoint: '%yb_remote_translations.api.client.endpoint%', method: '%yb_remote_translations.api.client.method%', auth: '%yb_remote_translations.api.client.auth%', headers: '%yb_remote_translations.api.client.headers%' }
+        calls:
+            - [setLogger, ['@yb_remote_translations.api.logger']]
+        public: false
+
+
+    yb_remote_translations.guzzle:
+        class: GuzzleHttp\Client
+        public: false

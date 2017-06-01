@@ -1,0 +1,21 @@
+language: php
+sudo: false
+
+cache:
+  directories:
+    - $HOME/.composer/cache/files
+
+matrix:
+  fast_finish: true
+  include:
+    - php: 7.1
+
+before_install:
+  - phpenv config-rm xdebug.ini
+  - composer self-update
+
+install:
+  - composer install
+
+script:
+  - ./vendor/bin/phpunit

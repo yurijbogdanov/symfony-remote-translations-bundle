@@ -1,0 +1,24 @@
+services:
+    yb_remote_translations.translation.loader.awss3:
+        class: '%yb_remote_translations.awss3.loader.class%'
+        arguments:
+            - '@yb_remote_translations.translation.loader.awss3.client'
+        tags:
+            - { name: translation.loader, alias: awss3 }
+
+
+    yb_remote_translations.translation.loader.awss3.client:
+        class: YB\Bundle\RemoteTranslationsBundle\Translation\Loader\Client\Adapter\AwsS3Adapter
+        arguments:
+            - '@yb_remote_translations.awss3'
+            - { bucket: '%yb_remote_translations.awss3.client.bucket%', filename: '%yb_remote_translations.awss3.client.filename%' }
+        calls:
+            - [setLogger, ['@yb_remote_translations.awss3.logger']]
+        public: false
+
+
+    yb_remote_translations.awss3:
+        class: Aws\S3\S3Client
+        arguments:
+            - { version: '%yb_remote_translations.awss3.client.version%', region: '%yb_remote_translations.awss3.client.region%', credentials: '%yb_remote_translations.awss3.client.credentials%' }
+        public: false
